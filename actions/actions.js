@@ -7,21 +7,21 @@ import { redirect } from "next/navigation";
 const prisma = new PrismaClient();
 
 
-// export const fetchBlogs = async () => {
-//     const blogs = await prisma.blog.findMany({});
-//     return blogs
-// }
+export const fetchBlogs = async () => {
+    const blogs = await prisma.blog.findMany({});
+    return blogs
+}
 
 
-// export const fetchSingleBlog = async (id) => {
-//     const blogs = await prisma.blog.findFirst({
-//         where: {
-//             id: id
-//         },
-//         include: {comments: true},
-//     });
-//     return blogs
-// }
+export const fetchSingleBlog = async (id) => {
+    const blogs = await prisma.blog.findFirst({
+        where: {
+            id : id,
+        },
+        include: {comments: true},
+    });
+    return blogs
+}
 
 
 
@@ -44,10 +44,10 @@ export const addBlog = async (formData) => {
         const new_blog = await prisma.blog.create({
             data: {
                 imageUrl: imageUrl ? imageUrl : null, //if it has or not
-                title:title,
-                category:category,
-                description:description,
-                // authorId: session?.user?.id
+                title,
+                category,
+                description,
+                
             }
         })
 

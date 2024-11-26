@@ -1,14 +1,17 @@
 "use client";
 import { addBlog } from "@/actions/actions";
 import Button from "@/app/ui/Button";
+import { useRef } from "react";
 const AddBlogForm = () => {
+  const ref = useRef();
   const addBlogHandler = async (formData) => {
     console.log("Adding a new blog");
     await addBlog(formData);
+    ref?.current?.reset();
   };
   return (
     <form
-      //   ref={ref}
+      ref={ref}
       //   onSubmit={handleSubmit(onSubmit)}
       action={addBlogHandler}
       className="max-w-md mx-auto mt-8 p-8 bg-white rounded shadow-md"
