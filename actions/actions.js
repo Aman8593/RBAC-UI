@@ -1,7 +1,7 @@
 "use server";
-// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
-// import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 const prisma = new PrismaClient();
@@ -35,10 +35,10 @@ export const addBlog = async (formData) => {
 
     // session to get the current logged in user info
 
-    // const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
 
     // only admin can add blog
-    // if (session?.user?.role === 'ADMIN' || session?.user?.permissions?.includes('CREATE_BLOG')) {
+    if (session?.user?.role === 'ADMIN' || session?.user?.permissions?.includes('CREATE_BLOG')) {
 
         // push the data into the DB
         const new_blog = await prisma.blog.create({
@@ -47,6 +47,7 @@ export const addBlog = async (formData) => {
                 title,
                 category,
                 description,
+                authorId: session?.user?.id
                 
             }
         })
@@ -56,48 +57,46 @@ export const addBlog = async (formData) => {
     }
 
 
-// }
+}
 
 // Update a Blog
 
-// export const updateBlog = async (id, formData) => {
+export const updateBlog = async (id, formData) => {
 
-//     // collect info from form using formData
-//     const imageUrl = formData.get('imageUrl');
-//     const title = formData.get('title');
-//     const category = formData.get('category');
-//     const description = formData.get('description');
+    // collect info from form using formData
+    const imageUrl = formData.get('imageUrl');
+    const title = formData.get('title');
+    const category = formData.get('category');
+    const description = formData.get('description');
 
-//     // session 
+    // session 
 
-//     const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
 
-//     // only admin can add blog
-//     if (session?.user?.role === 'ADMIN' || session?.user?.permissions?.includes('EDIT_BLOG')) {
-//         // push the data into the DB
-//         const updated_blog = await prisma.blog.update({
-//             where: {
-//                 id: id,
-//             },
-//             data: {
-//                 imageUrl: imageUrl ? imageUrl : null,
-//                 title,
-//                 category,
-//                 description,
-//                 authorId: session?.user?.id
-//             }
-//         })
+    // only admin can add blog
+    if (session?.user?.role === 'ADMIN' || session?.user?.permissions?.includes('EDIT_BLOG')) {
+        // push the data into the DB
+    const updated_blog = await prisma.blog.update({
+            where: {
+                id: id,
+            },
+            data: {
+                imageUrl: imageUrl ? imageUrl : null,
+                title,
+                category,
+                description,
+                authorId: session?.user?.id
+            }
+        })
 
-//         revalidatePath(`/blogs/update-blog/${id}`)
-//         redirect('/blogs')
+        revalidatePath(`/blogs/update-blog/${id}`)
+        redirect('/blogs')
 
-//     } else {
-//         console.log('Not Possible!')
-//     }
+    } 
 
 
 
-// }
+}
 
 
 // // add Comment to a blog

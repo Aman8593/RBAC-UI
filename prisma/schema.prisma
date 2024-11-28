@@ -10,12 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
+model User {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  username    String
+  email       String    @unique
+  password    String
+  role        Role      @default(USER)
+  interestedTopics String[]
+  permissions String[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Comment     Comment[]
+  Blog        Blog[]
+}
 
 model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   authorId  String   @db.ObjectId
-  author    String    @default("aman")
+  author    User?    @relation(fields: [authorId], references: [id])
   text      String
   blogId    String   @db.ObjectId
   blog      Blog?    @relation(fields: [blogId], references: [id])
@@ -28,7 +40,8 @@ model Blog {
   imageUrl    String?
   title       String
   description String?
-  author      String     @default("aman")
+  authorId    String    @db.ObjectId
+  author      User?     @relation(fields: [authorId], references: [id])
   category    String
   tags        String[]
   likes       Int       @default(0)
@@ -40,3 +53,8 @@ model Blog {
   comments    Comment[]
 }
 
+enum Role {
+  ADMIN
+  EDITOR
+  USER
+}

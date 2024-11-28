@@ -1,11 +1,11 @@
 "use client";
-// import { useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-// import LogoutButton from "../ui/LogoutButton";
+import LogoutButton from "../ui/LogoutButton";
 
 const Navbar = () => {
-  // const session = useSession();
+  const session = useSession();
 
   return (
     <nav className="bg-gray-800 dark:bg-gray-900">
@@ -34,31 +34,32 @@ const Navbar = () => {
             >
               Home
             </Link>
-            {/* {session?.data?.user?.role == 'ADMIN' && */}
+            {session?.data?.user?.role == 'ADMIN' &&
             <Link
               href="/blogs/add-blog"
               className="hover:text-gray-400 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
               Create Blog
-            </Link>
+            </Link>}
 
-            {/* {session?.data?.user?.role === 'ADMIN' || session?.data?.user?.role === 'USER' && */}
+            {session?.data?.user?.role === 'ADMIN' || session?.data?.user?.role === 'USER' &&
             <Link
               href="/blogs/add-preference"
               className="hover:text-gray-400 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
               Update Preference
-            </Link>
+            </Link>}
 
-            {/* {session?.data?.user?.role == 'ADMIN' && */}
+            {session?.data?.user?.role == 'ADMIN' &&
             <Link
               href="/admin/dashboard"
               className="hover:text-gray-400 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
               Admin
             </Link>
+            }
 
-            {/* {session &&  <LogoutButton label={'Logout'} />} */}
+            {session &&  <LogoutButton label={'Logout'} />}
 
             <Link
               href="/auth/login"
