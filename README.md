@@ -1,8 +1,6 @@
 
 # 🌟 RBAC-UI: Role-Based Access Control User Interface - Blog App
 
-![RBAC-UI Banner](https://via.placeholder.com/1200x400?text=RBAC+UI+Dashboard)
-
 ## 🚀 How to Use This on Your PC
 
 1. **📥 Clone the Repository**:
@@ -86,9 +84,10 @@ By working with this project, you will learn:
 7. **Blog Management**:
    - Create blogs using the **Add Blog Form** ✍️.
    - Edit blogs through the **Edit Blog Form** 🖋️.
+   - Users can submit comments through the **Blog Comment Form**, and only the comment's author has the permission to delete it. ✍️🗑️ 
    - Assign permissions to users for actions like `EDIT_BLOG`, `UPDATE_BLOG`, `ADMIN`, and `READ_BLOG` from the **Admin Dashboard** 🛡️.
    - Perform tasks based on user permissions to ensure secure and dynamic blog operations 🔄.
 
 ---
 
-✨ Feel free to React out for any Help Required ✨
+✨ Feel free to Reach out for any Help Required ✨
