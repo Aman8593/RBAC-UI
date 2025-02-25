@@ -81,7 +81,7 @@ const CommentAddForm = ({ comments, blogId }) => {
             <form ref={ref} action={addCommentHandler} className="max-w-md flex mx-auto mt-8">
 
                 <div className="mb-2 mr-5">
-                    <Image className='rounded-full mt-6' src="/logo.jpg" height={70} width={70} />
+                    <Image className='rounded-full mt-6' src="/logo.jpg" alt="logo" height={70} width={70} />
                 </div>
 
                 <div className="mb-4">

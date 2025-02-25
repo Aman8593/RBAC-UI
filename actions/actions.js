@@ -99,141 +99,138 @@ export const updateBlog = async (id, formData) => {
 }
 
 
-// // add Comment to a blog
-// export const addCommentToBlog = async (blogId, formData) => {
-//     // collect info from form using formData
-//     const text = formData.get('text');
+// add Comment to a blog
+export const addCommentToBlog = async (blogId, formData) => {
+    // collect info from form using formData
+    const text = formData.get('text');
 
-//     // session
+    // session
 
-//     const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
 
-//     // push the data into the DB
+    // push the data into the DB
 
-//     try {
-//         const added_comment = await prisma.comment.create({
-//             data: {
-//                 authorId: session?.user?.id,
-//                 blogId: blogId,
-//                 text: text
-//             }
-//         })
+    try {
+        const added_comment = await prisma.comment.create({
+            data: {
+                authorId: session?.user?.id,
+                blogId: blogId,
+                text: text
+            }
+        })
         
-//     } catch (error) {
-//         console.log('error', error);
-//     }
-//      finally {
-//         revalidatePath(`/blogs/${blogId}`)
-//     } 
+    } catch (error) {
+        console.log('error', error);
+    }
+     finally {
+        revalidatePath(`/blogs/${blogId}`)
+    } 
    
-// }
+}
 
 
 
 
-// fetching all comments
-// export const fetchComments = async (blogId) => {
+//fetching all comments
+export const fetchComments = async (blogId) => {
 
-//     //const skip = (page - 1) * pageSize
+    //const skip = (page - 1) * pageSize
 
-//     const comments = await prisma.comment.findMany({
-//         where: {
-//             blogId: blogId
-//         }, 
-//         orderBy: {
-//             createdAt: 'desc'
-//         },
-//         take: 5, // pagination
-//     })
+    const comments = await prisma.comment.findMany({
+        where: {
+            blogId: blogId
+        }, 
+        orderBy: {
+            createdAt: 'desc'
+        },
+        take: 5, // pagination
+    })
 
-//     return comments
+    return comments
 
-// }
+}
 
 // delete Comment by Id and blogId
 
 
-// export const deleteComment = async (commentId, blogId) => {
+export const deleteComment = async (commentId, blogId) => {
 
-//     // only auther of this comment can delete it!
+    // only auther of this comment can delete it!
 
-//     const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
 
-//     // comment of autherId
+    // comment of autherId
 
-//     const commentData = await prisma.comment.findFirst({
-//         where: {
-//             id: commentId
-//         }
-//     })
+    const commentData = await prisma.comment.findFirst({
+        where: {
+            id: commentId
+        }
+    })
 
 
-//     if (session?.user?.id === commentData?.authorId) {
+    if (session?.user?.id === commentData?.authorId) {
 
-//         try {
-//             await prisma.comment.delete({
-//                 where: {
-//                     id: commentId
-//                 }
-//             })
-//         } catch (error) {
-//             console.log('error', error)
-//         } finally {
-//             revalidatePath(`/blogs/${blogId}`);
-//         }
+        try {
+            await prisma.comment.delete({
+                where: {
+                    id: commentId
+                }
+            })
+        } catch (error) {
+            console.log('error', error)
+        } finally {
+            revalidatePath(`/blogs/${blogId}`);
+        }
         
-//     } else {
-//         console.log('You Are Not Authorize to Delete This Comment!');
-//     }
+    } else {
+        console.log('You Are Not Authorize to Delete This Comment!');
+    }
 
-// }
-
-
-// // fetch users
-
-// export const fetchUsers = async () => {
-//     const users = await prisma.user.findMany({
-//         take: 5
-//     })
-
-//     return users
-
-// }
-
-// // assign user to a particular role from admin panel
-
-// export const assignPermission = async (userId, formData) => {
-
-//     const permission_name = formData.get('permission_name');
-
-//     // session 
-//     const session = await getServerSession(authOptions);
-
-//     // only admin can add blog
-//     if (session?.user?.role === 'ADMIN') {
-
-//         // asssign some permission to user by admin
-//         const assigned_user = await prisma.user.update({
-//             where: {
-//                 id: userId,
-//             },
-
-//             data: {
-//                 permissions: {
-//                     push: permission_name
-//                 }
-
-//             }
-
-//         })
-//         revalidatePath(`/admin/dashboard`)
-//         redirect(`/admin/dashboard`)
-
-//     }
+}
 
 
+// fetch users
 
-// }
+export const fetchUsers = async () => {
+    const users = await prisma.user.findMany({
+        take: 5
+    })
+
+    return users
+
+}
+
+// assign user to a particular role from admin panel
+
+export const assignPermission = async (userId, formData) => {
+
+    const permission_name = formData.get('permission_name');
+
+    // session 
+    const session = await getServerSession(authOptions);
+
+    // only admin can add blog
+    if (session?.user?.role === 'ADMIN') {
+
+        // asssign some permission to user by admin
+        const assigned_user = await prisma.user.update({
+            where: {
+                id: userId,
+            },
+
+            data: {
+                permissions: {
+                    push: permission_name
+                }
+
+            }
+
+        })
+        revalidatePath(`/admin/dashboard`)
+        redirect(`/admin/dashboard`)
+
+    }
+}
 
 
 
