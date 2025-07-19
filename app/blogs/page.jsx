@@ -1,35 +1,28 @@
-import { fetchBlogs } from "@/actions/actions";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import React from "react";
 import BlogItem from "../components/BlogItem";
 import Search from "../components/Search";
 
 const prisma = new PrismaClient();
-const Blogs = async ({searchParams}) => {
 
-  const query = await searchParams?.query;
-   
-  // home blogs listing page
+export default async function Blogs({ searchParams }) {
+  // ✅ Access synchronously
+  const query = searchParams?.query || "";
 
   const blogs = await prisma.blog.findMany({
-      where: query ? {
+    where: query
+      ? {
           OR: [
-              { title: { contains: query } },
-              { category: { contains: query } },
+            { title: { contains: query, mode: "insensitive" } },
+            { category: { contains: query, mode: "insensitive" } },
           ],
+        }
+      : {},
+  });
 
-      } : {} // fetch all the data blogs
-  })
-
-
-
-
-
-  // const blogs = await fetchBlogs();
-  // console.log("new", blogs);
   return (
     <div>
-      <Search/>
+      <Search />
       <h2 className="text-center mt-4 px-2 text-2xl py-2 font-bold">
         All Blogs
       </h2>
@@ -38,9 +31,6 @@ const Blogs = async ({searchParams}) => {
         {blogs?.length > 0 &&
           blogs.map((blog) => <BlogItem key={blog?.id} blog={blog} />)}
       </div>
-      
     </div>
   );
-};
-
-export default Blogs;
+}
