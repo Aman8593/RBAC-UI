@@ -1,93 +1,223 @@
+# RBAC-UI - Role-Based Access Control Blog Platform
 
-# 🌟 RBAC-UI: Role-Based Access Control User Interface - Blog App
+A modern blog platform built with Next.js 15 that implements comprehensive Role-Based Access Control (RBAC) with user authentication, permissions management, and content management features.
 
-## 🚀 How to Use This on Your PC
+## Features
 
-1. **📥 Clone the Repository**:
-   ```bash
-   git clone https://github.com/Aman8593/RBAC-UI.git
-   ```
+### Authentication & Authorization
 
-2. **📂 Navigate to the Project Directory**:
-   ```bash
-   cd RBAC-UI
-   ```
+- **NextAuth.js Integration**: Secure JWT-based authentication
+- **Role-Based Access Control**: Three user roles (ADMIN, EDITOR, USER)
+- **Permission System**: Granular permissions for specific actions
+- **Protected Routes**: Middleware-based route protection
 
-3. **📦 Install Dependencies**:
-   Ensure you have [Node.js](https://nodejs.org/) installed, then run:
-   ```bash
-   npm install
-   ```
+### Blog Management
 
-4. **▶️ Run the Application**:
-   Start the development server:
-   ```bash
-   npm run dev
-   ```
+- **Create/Edit Blogs**: Role and permission-based blog creation and editing
+- **Comment System**: Interactive commenting with author-based deletion
+- **Content Categories**: Organized blog categorization
+- **Image Support**: Blog image upload and display
 
-5. **🌐 Access the Application**:
-   Open your browser and navigate to:
-   ```
-   http://localhost:3000
-   ```
+### User Management
 
-## 🛠️ Tech Stack Used
+- **Admin Dashboard**: User management and permission assignment
+- **User Profiles**: Individual user data and preferences
+- **Permission Assignment**: Dynamic permission granting by admins
 
-- **Frontend Framework**: Next.js ⚛️
-- **Styling**: Tailwind CSS 🎨
-- **State Management**: Context API/React State 🔐
-- **Backend**: MongoDB and Prisma ORM 🕈️
-- **Authentication & Authorization**: Role-Based Access Control (RBAC) 🔒
-- **Deployment**: Vercel or another cloud provider ☁️
+## Tech Stack
 
-## 📋 Prerequisites
+- **Frontend**: Next.js 15 with App Router, React 18, TailwindCSS
+- **Backend**: Next.js API Routes, Server Actions
+- **Database**: MongoDB with Prisma ORM
+- **Authentication**: NextAuth.js with Credentials Provider
+- **Styling**: TailwindCSS with Geist font family
+- **Security**: bcrypt for password hashing
 
-Before setting up this project, ensure you have the following:
+## Getting Started
 
-1. **Node.js**: Version 16 or higher. Download and install from [Node.js](https://nodejs.org/).
-2. **npm or yarn**: Comes with Node.js. Verify installation by running:
-   ```bash
-   node -v
-   npm -v
-   ```
-3. **Git**: To clone the repository. Install from [Git](https://git-scm.com/).
-4. **Code Editor**: [VS Code](https://code.visualstudio.com/) recommended for development.
-5. **Browser**: A modern browser like Chrome or Firefox.
+### Prerequisites
 
-## 📚 What You Learn
+- Node.js 18+
+- MongoDB database
+- npm/yarn/pnpm
 
-By working with this project, you will learn:
+### Installation
 
-1. How to implement **Role-Based Access Control (RBAC)** for user management 🔄.
-2. Using **Next.js** for creating server-rendered React applications ⚛️.
-3. Leveraging **Tailwind CSS** for fast and responsive UI design 🎨.
-4. Creating reusable components for better maintainability and scalability 🔧.
-5. Managing user roles, permissions, and authorization workflows effectively 🔒.
-6. Structuring a modern web application with best practices 🗰️.
+1. Clone the repository:
 
-## ✨ Features Performed
+```bash
+git clone <repository-url>
+cd rbac-ui
+```
 
-1. **User Management**:
-   - Create, update, and delete users 🧑‍💼.
-   - Assign roles to users 🔧.
-2. **Role Management**:
-   - Define and manage roles 📋.
-   - Set permissions for each role 🔐.
-3. **Authentication**:
-   - Implement secure login/logout functionality 🔑.
-4. **Authorization**:
-   - Restrict access to specific pages or actions based on user roles ⛔.
-5. **Responsive UI**:
-   - Fully responsive design built with Tailwind CSS 📱🖱.
-6. **API Integration**:
-   - Connect with backend APIs to fetch and manage user and role data 🔗.
-7. **Blog Management**:
-   - Create blogs using the **Add Blog Form** ✍️.
-   - Edit blogs through the **Edit Blog Form** 🖋️.
-   - Users can submit comments through the **Blog Comment Form**, and only the comment's author has the permission to delete it. ✍️🗑️ 
-   - Assign permissions to users for actions like `EDIT_BLOG`, `UPDATE_BLOG`, `ADMIN`, and `READ_BLOG` from the **Admin Dashboard** 🛡️.
-   - Perform tasks based on user permissions to ensure secure and dynamic blog operations 🔄.
+2. Install dependencies:
 
----
+```bash
+npm install
+```
 
-✨ Feel free to Reach out for any Help Required ✨
+3. Set up environment variables:
+
+```bash
+cp .env.example .env
+```
+
+Configure the following variables in `.env`:
+
+```env
+DATABASE_URL="mongodb://your-mongodb-connection-string"
+NEXTAUTH_SECRET="your-nextauth-secret"
+NEXTAUTH_JWT_SECRET="your-jwt-secret"
+NEXTAUTH_URL="http://localhost:3000"
+```
+
+4. Set up the database:
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+5. Run the development server:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+## Project Structure
+
+```
+rbac-ui/
+├── app/
+│   ├── api/auth/[...nextauth]/     # NextAuth configuration
+│   ├── admin/                      # Admin dashboard pages
+│   ├── auth/                       # Authentication pages
+│   ├── blogs/                      # Blog-related pages
+│   ├── components/                 # Reusable UI components
+│   ├── libs/                       # Utility libraries
+│   ├── ui/                         # UI components
+│   ├── layout.js                   # Root layout
+│   ├── page.js                     # Home page
+│   └── middleware.js               # Route protection middleware
+├── actions/
+│   └── actions.js                  # Server actions for data operations
+├── prisma/
+│   └── schema.prisma              # Database schema
+└── public/                        # Static assets
+```
+
+## Database Schema
+
+### User Model
+
+- **id**: Unique identifier
+- **username**: Display name
+- **email**: Unique email address
+- **password**: Hashed password
+- **role**: User role (ADMIN, EDITOR, USER)
+- **permissions**: Array of specific permissions
+- **interestedTopics**: User preferences
+
+### Blog Model
+
+- **id**: Unique identifier
+- **title**: Blog title
+- **description**: Blog content
+- **category**: Blog category
+- **tags**: Array of tags
+- **authorId**: Reference to User
+- **imageUrl**: Optional blog image
+- **likes/upvotes**: Engagement metrics
+- **published**: Publication status
+
+### Comment Model
+
+- **id**: Unique identifier
+- **text**: Comment content
+- **authorId**: Reference to User
+- **blogId**: Reference to Blog
+
+## API Endpoints
+
+### Authentication
+
+- `POST /api/auth/signin` - User login
+- `POST /api/auth/signout` - User logout
+
+### Server Actions
+
+- `fetchBlogs()` - Get all blogs
+- `fetchSingleBlog(id)` - Get blog by ID
+- `addBlog(formData)` - Create new blog (ADMIN/CREATE_BLOG permission)
+- `updateBlog(id, formData)` - Update blog (ADMIN/EDIT_BLOG permission)
+- `addCommentToBlog(blogId, formData)` - Add comment
+- `deleteComment(commentId, blogId)` - Delete comment (author only)
+- `fetchUsers()` - Get all users (admin)
+- `assignPermission(userId, formData)` - Assign permissions (admin)
+
+## Permissions System
+
+### Roles
+
+- **ADMIN**: Full system access
+- **EDITOR**: Content management permissions
+- **USER**: Basic user permissions
+
+### Specific Permissions
+
+- `CREATE_BLOG`: Create new blog posts
+- `EDIT_BLOG`: Edit existing blog posts
+- Additional permissions can be assigned dynamically
+
+## Security Features
+
+- **Password Hashing**: bcrypt for secure password storage
+- **JWT Tokens**: Secure session management
+- **Route Protection**: Middleware-based access control
+- **Permission Validation**: Server-side permission checks
+- **CSRF Protection**: Built-in NextAuth.js security
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+### Adding New Permissions
+
+1. Define permission in your permission system
+2. Add permission checks in server actions
+3. Update UI components to respect permissions
+4. Test with different user roles
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Connect your repository to Vercel
+2. Configure environment variables
+3. Deploy automatically on push
+
+### Other Platforms
+
+1. Build the application: `npm run build`
+2. Set up environment variables
+3. Configure MongoDB connection
+4. Deploy the `.next` folder
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
