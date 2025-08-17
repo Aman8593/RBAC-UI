@@ -1,5 +1,7 @@
 import { fetchSingleBlog } from "@/actions/actions";
 import CommentAddForm from "@/app/components/forms/CommentAddForm";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -7,6 +9,7 @@ import React from "react";
 const BlogDetails = async ({ params }) => {
   const id = params?.id;
   const blog = await fetchSingleBlog(id);
+  const session = await getServerSession(authOptions);
   return (
     <>
       <div className="text-center bg-gray-800 rounded-md border-2 border-green-600 shadow-md px-4 py-2 mx-3 my-3">
@@ -34,12 +37,15 @@ const BlogDetails = async ({ params }) => {
         <p className="text-center text-gray-300 my-5 mx-2 px-2 py-5">
           {blog?.description}
         </p>
-        <Link
-          className="text-gray-700 bg-gray-200 my-4 border-2 py-2 text-center  rounded-lg border-gray-400 shadow-sm mx-2  px-2"
-          href={`/blogs/update-blog/${blog?.id}`}
-        >
-          Update Blog
-        </Link>
+        {(session?.user?.role === "ADMIN" ||
+          session?.user?.permissions?.includes("EDIT_BLOG")) && (
+          <Link
+            className="text-gray-700 bg-gray-200 my-4 border-2 py-2 text-center  rounded-lg border-gray-400 shadow-sm mx-2  px-2"
+            href={`/blogs/update-blog/${blog?.id}`}
+          >
+            Update Blog
+          </Link>
+        )}
       </div>
       <CommentAddForm />
     </>
